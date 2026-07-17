@@ -11,6 +11,14 @@ const links = [
   { label: 'Evil Eye', href: '/evil' },
   { label: 'Lightning', href: '/lightning' },
   { label: 'Rays', href: '/rays' },
+  { label: 'Dither', href: '/dither' },
+  { label: 'Dots', href: '/dots' },
+  { label: 'DotGrid', href: '/dotgrid' },
+  { label: 'Glitch', href: '/glitch' },
+  { label: 'Pillar', href: '/pillar' },
+  { label: 'Orb', href: '/orb' },
+  { label: 'Blast', href: '/blast' },
+  { label: 'Snow', href: '/snow' },
 ]
 
 const route = useRoute()
@@ -20,7 +28,6 @@ const navCollapsed = ref(false)
 
 <template>
   <div class="min-h-screen bg-black text-white font-sans">
-    <!-- Collapse toggle -->
     <button
       @click="navCollapsed = !navCollapsed"
       class="fixed top-3 left-3 z-[60] w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 cursor-pointer"
@@ -33,7 +40,6 @@ const navCollapsed = ref(false)
       </svg>
     </button>
 
-    <!-- Nav bar -->
     <div
       class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
       :class="navCollapsed ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'"
@@ -47,7 +53,7 @@ const navCollapsed = ref(false)
           pill-color="rgba(255,255,255,0.06)"
           hovered-pill-text-color="#02030a"
           pill-text-color="rgba(236,248,255,0.85)"
-          :initial-load-animation="true"
+          :initial-load-animation="false"
         />
       </div>
     </div>
