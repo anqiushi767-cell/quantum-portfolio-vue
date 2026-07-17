@@ -19,16 +19,18 @@ const activeHref = computed(() => route.path)
 
 <template>
   <div class="min-h-screen bg-black text-white font-sans">
-    <PillNav
-      logo="/favicon.svg"
-      :items="links"
-      :active-href="activeHref"
-      base-color="#00f5ff"
-      pill-color="#0a0a14"
-      hovered-pill-text-color="#02030a"
-      pill-text-color="#ecf8ff"
-      :initial-load-animation="true"
-    />
-    <RouterView />
+  <div class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl" style="background:rgba(2,3,10,0.4);">
+  <PillNav
+    logo="/favicon.svg"
+    :items="links"
+    :active-href="activeHref"
+    base-color="rgba(255,255,255,0.9)"
+    pill-color="rgba(255,255,255,0.08)"
+    hovered-pill-text-color="#02030a"
+    pill-text-color="rgba(236,248,255,0.85)"
+    :initial-load-animation="true"
+  />
+  </div>
+  <RouterView />
   </div>
 </template>
