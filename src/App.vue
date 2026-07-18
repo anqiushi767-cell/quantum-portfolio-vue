@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView, useRoute } from 'vue-router'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import PillNav from './components/PillNav.vue'
 
 const links = [
@@ -24,10 +24,55 @@ const links = [
 const route = useRoute()
 const activeHref = computed(() => route.path)
 const navCollapsed = ref(false)
+
+// ─── Turnstile Gate ───
+const verified = ref(false)
+const TURNSTILE_SITE_KEY = '0x4AAAAAAD4RFPLUqHVV61lQ'
+
+onMounted(() => {
+  // Check if already verified in this session
+  if (localStorage.getItem('_qs_verified') === '1') {
+    verified.value = true
+    return
+  }
+
+  // Load Turnstile script
+  const script = document.createElement('script')
+  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+  script.async = true
+  script.defer = true
+  script.onload = () => {
+    if (window.turnstile) {
+      window.turnstile.render('#turnstileWidget', {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: () => {
+          localStorage.setItem('_qs_verified', '1')
+          verified.value = true
+        },
+        theme: 'dark',
+      })
+    }
+  }
+  document.head.appendChild(script)
+})
 </script>
 
 <template>
-  <div class="min-h-screen bg-black text-white font-sans">
+  <!-- Turnstile Gate -->
+  <div
+    v-if="!verified"
+    class="fixed inset-0 z-[999] flex flex-col items-center justify-center gap-6 bg-black"
+  >
+    <div class="text-center space-y-3">
+      <div class="w-3 h-3 rounded-full bg-cyan-400 mx-auto shadow-[0_0_18px_rgba(0,245,255,0.6)]" />
+      <p class="font-mono text-sm tracking-[0.15em] text-white/60">HUMAN VERIFICATION REQUIRED</p>
+      <p class="text-xs text-white/30 tracking-[0.08em]">Cloudflare Turnstile · Automatic · No CAPTCHA</p>
+    </div>
+    <div id="turnstileWidget" />
+  </div>
+
+  <!-- Main App (hidden until verified) -->
+  <div v-else class="min-h-screen bg-black text-white font-sans">
     <button
       @click="navCollapsed = !navCollapsed"
       class="fixed top-3 left-3 z-[60] w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 cursor-pointer"
